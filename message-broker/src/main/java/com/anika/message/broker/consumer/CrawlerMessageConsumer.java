@@ -1,50 +1,41 @@
 package com.anika.message.broker.consumer;
 
-import com.anika.message.broker.consumer.processor.CrawlerBaseUrlTaskProcessor;
-import com.anika.message.broker.consumer.processor.CrawlerHostNameTaskProcessor;
-import com.anika.message.broker.consumer.processor.CrawlerSingleUrlTaskProcessor;
-import com.anika.message.broker.consumer.processor.MessageProcessor;
-import com.anika.message.broker.message.CrawlerBaseUrlTaskMessage;
-import com.anika.message.broker.message.CrawlerHostNameTaskMessage;
-import com.anika.message.broker.message.CrawlerSingleUrlTaskMessage;
+import com.anika.message.broker.consumer.processor.CrawlerTaskProcessor;
+import com.anika.message.broker.message.CrawlUrlWithDepthTaskMessage;
+import com.anika.message.broker.message.CrawlHostTaskMessage;
+import com.anika.message.broker.message.CrawlUrlTaskMessage;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.stereotype.Component;
 
+@Component
+@EnableRabbit
 @RabbitListener(queues = "${rabbit.crawler.queue.name}")
+@ConditionalOnBean(CrawlerTaskProcessor.class)
 public class CrawlerMessageConsumer {
 
-    private MessageProcessor<CrawlerSingleUrlTaskMessage> singleUrlTaskProcessor;
-    private MessageProcessor<CrawlerBaseUrlTaskMessage> baseUrlTaskProcessor;
-    private MessageProcessor<CrawlerHostNameTaskMessage> hostNameTaskProcessor;
-
-    @Autowired
-    public void setSingleUrlTaskProcessor(CrawlerSingleUrlTaskProcessor processor) {
-        this.singleUrlTaskProcessor = processor;
-    }
-
-    @Autowired
-    public void setBaseUrlTaskProcessor(CrawlerBaseUrlTaskProcessor processor) {
-        this.baseUrlTaskProcessor = processor;
-    }
-
-    @Autowired
-    public void setHostNameTaskProcessor(CrawlerHostNameTaskProcessor processor) {
-        this.hostNameTaskProcessor = processor;
-    }
+    @Autowired(required = false)
+    private CrawlerTaskProcessor<CrawlUrlTaskMessage> singleUrlTaskProcessor;
+    @Autowired(required = false)
+    private CrawlerTaskProcessor<CrawlUrlWithDepthTaskMessage> baseUrlTaskProcessor;
+    @Autowired(required = false)
+    private CrawlerTaskProcessor<CrawlHostTaskMessage> hostNameTaskProcessor;
 
     @RabbitHandler
-    public void handleMessage(CrawlerSingleUrlTaskMessage message) {
+    public void handleMessage(CrawlUrlTaskMessage message) {
         this.singleUrlTaskProcessor.process(message);
     }
 
     @RabbitHandler
-    public void handleMessage(CrawlerBaseUrlTaskMessage message) {
+    public void handleMessage(CrawlUrlWithDepthTaskMessage message) {
         this.baseUrlTaskProcessor.process(message);
     }
 
     @RabbitHandler
-    public void handleMessage(CrawlerHostNameTaskMessage message) {
+    public void handleMessage(CrawlHostTaskMessage message) {
         this.hostNameTaskProcessor.process(message);
     }
 }

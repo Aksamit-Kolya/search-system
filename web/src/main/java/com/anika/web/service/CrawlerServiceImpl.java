@@ -2,7 +2,9 @@ package com.anika.web.service;
 
 import com.anika.message.broker.producer.CrawlerMessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CrawlerServiceImpl implements CrawlerService{
 
     private final CrawlerMessageProducer crawlerMessageProducer;

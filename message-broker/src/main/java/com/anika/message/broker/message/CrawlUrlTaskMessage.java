@@ -1,14 +1,7 @@
 package com.anika.message.broker.message;
 
-public class CrawlerSingleUrlTaskMessage {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private final String url;
+import java.io.Serializable;
 
-    public CrawlerSingleUrlTaskMessage(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-}
+public record CrawlUrlTaskMessage(@JsonProperty("url") String url) implements Serializable {}

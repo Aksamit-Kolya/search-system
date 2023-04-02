@@ -1,20 +1,8 @@
 package com.anika.message.broker.message;
 
-public class CrawlerBaseUrlTaskMessage {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private final String startUrl;
-    private final int depth;
+import java.io.Serializable;
 
-    public CrawlerBaseUrlTaskMessage(String startUrl, int depth) {
-        this.startUrl = startUrl;
-        this.depth = depth;
-    }
-
-    public String getStartUrl() {
-        return startUrl;
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-}
+public record CrawlUrlWithDepthTaskMessage(@JsonProperty("startUrl") String startUrl,
+                                           @JsonProperty("depth") int depth) implements Serializable {}

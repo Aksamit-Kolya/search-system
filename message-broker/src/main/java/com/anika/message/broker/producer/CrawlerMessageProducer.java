@@ -1,8 +1,8 @@
 package com.anika.message.broker.producer;
 
-import com.anika.message.broker.message.CrawlerBaseUrlTaskMessage;
-import com.anika.message.broker.message.CrawlerHostNameTaskMessage;
-import com.anika.message.broker.message.CrawlerSingleUrlTaskMessage;
+import com.anika.message.broker.message.CrawlUrlWithDepthTaskMessage;
+import com.anika.message.broker.message.CrawlHostTaskMessage;
+import com.anika.message.broker.message.CrawlUrlTaskMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,14 +25,14 @@ public class CrawlerMessageProducer {
     }
 
     public void sendUrlToCrawler(String url) {
-        rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlerSingleUrlTaskMessage(url));
+        rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlUrlTaskMessage(url));
     }
 
     public void sendUrlToCrawler(String url, Integer depth) {
-        rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlerBaseUrlTaskMessage(url, depth));
+        rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlUrlWithDepthTaskMessage(url, depth));
     }
 
     public void sendHostNameToCrawler(String hostName) {
-        rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlerHostNameTaskMessage(hostName));
+        rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlHostTaskMessage(hostName));
     }
 }

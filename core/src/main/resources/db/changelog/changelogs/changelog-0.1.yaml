@@ -1,24 +1,24 @@
 databaseChangeLog:
   - changeSet:
-      id: change-set-1
+      id: change-set-0.1.1
       author: anika
       changes:
         - sql:
             splitStatements: true
-            sql: |
+            sql:
               CREATE TABLE IF NOT EXISTS page (
                 id BIGSERIAL PRIMARY KEY,
-                url VARCHAR(255),
+                url VARCHAR(255) ,
                 title VARCHAR(255),
                 description VARCHAR(255),
                 key_words VARCHAR(255),
                 content TEXT
               );
   - changeSet:
-      id: change-set-2
+      id: change-set-0.1.2
       author: anika
       changes:
         - sql:
             splitStatements: true
-            sql: |
+            sql:
               ALTER TABLE page ADD CONSTRAINT unique_url UNIQUE (url);

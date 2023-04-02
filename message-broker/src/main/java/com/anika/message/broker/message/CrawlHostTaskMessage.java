@@ -1,14 +1,8 @@
 package com.anika.message.broker.message;
 
-public class CrawlerHostNameTaskMessage {
 
-    private final String hostName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public CrawlerHostNameTaskMessage(String hostName) {
-        this.hostName = hostName;
-    }
+import java.io.Serializable;
 
-    public String getHostName() {
-        return hostName;
-    }
-}
+public record CrawlHostTaskMessage(@JsonProperty("hostName") String hostName) implements Serializable {}
