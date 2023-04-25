@@ -1,0 +1,142 @@
+#databaseChangeLog:
+#  - changeSet:
+#      id: 10-add-document-foreign-key-constraints
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: document
+#            baseColumnNames: id
+#            constraintName: document_document_fk
+#            referencedTableName: document_document
+#            referencedColumnNames: document_id
+#            onDelete: CASCADE
+#        - addForeignKeyConstraint:
+#            baseTableName: document
+#            baseColumnNames: id
+#            constraintName: document_keyword_document_fk
+#            referencedTableName: document_keyword
+#            referencedColumnNames: document_id
+#            onDelete: CASCADE
+#        - addForeignKeyConstraint:
+#            baseTableName: document
+#            baseColumnNames: id
+#            constraintName: query_document_document_fk
+#            referencedTableName: query_document
+#            referencedColumnNames: document_id
+#            onDelete: CASCADE
+#
+#  - changeSet:
+#      id: 11-add-keyword-foreign-key-constraints
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: keyword
+#            baseColumnNames: id
+#            constraintName: document_keyword_keyword_fk
+#            referencedTableName: document_keyword
+#            referencedColumnNames: keyword_id
+#            onDelete: CASCADE
+#        - addForeignKeyConstraint:
+#            baseTableName: keyword
+#            baseColumnNames: id
+#            constraintName: query_keyword_keyword_fk
+#            referencedTableName: query_keyword
+#            referencedColumnNames: keyword_id
+#            onDelete: CASCADE
+#  - changeSet:
+#      id: 12-add-user-foreign-key-constraints
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: user
+#            baseColumnNames: id
+#            constraintName: user_query_user_fk
+#            referencedTableName: user_query
+#            referencedColumnNames: user_id
+#            onDelete: CASCADE
+#  - changeSet:
+#      id: 13-add-query-foreign-key-constraints
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: query
+#            baseColumnNames: id
+#            constraintName: user_query_query_fk
+#            referencedTableName: user_query
+#            referencedColumnNames: query_id
+#            onDelete: CASCADE
+#        - addForeignKeyConstraint:
+#            baseTableName: query
+#            baseColumnNames: id
+#            constraintName: query_document_query_fk
+#            referencedTableName: query_document
+#            referencedColumnNames: query_id
+#            onDelete: CASCADE
+#  - changeSet:
+#      id: 14-add-foreign-key-document
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: document
+#            baseColumnNames: id
+#            referencedTableName: document
+#            referencedColumnNames: id
+#            constraintName: document_document_fk
+#            onUpdate: CASCADE
+#  - changeSet:
+#      id: 15-add-foreign-key-keyword
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: keyword
+#            baseColumnNames: id
+#            referencedTableName: document_keyword
+#            referencedColumnNames: keyword_id
+#            constraintName: document_keyword_keyword_fk
+#            onUpdate: CASCADE
+#
+#  - changeSet:
+#      id: 16-add-foreign-key-keyword-query
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: keyword
+#            baseColumnNames: id
+#            referencedTableName: query_keyword
+#            referencedColumnNames: keyword_id
+#            constraintName: query_keyword_keyword_fk
+#            onUpdate: CASCADE
+#  - changeSet:
+#      id: 17-add-foreign-key-user
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: user
+#            baseColumnNames: id
+#            referencedTableName: user_query
+#            referencedColumnNames: user_id
+#            constraintName: user_query_user_fk
+#            onUpdate: CASCADE
+#  - changeSet:
+#      id: 18-add-foreign-key-query
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: query
+#            baseColumnNames: id
+#            referencedTableName: user_query
+#            referencedColumnNames: query_id
+#            constraintName: user_query_query_fk
+#            onUpdate: CASCADE
+#
+#  - changeSet:
+#      id: 19-add-foreign-key-query-document
+#      author: ANiko
+#      changes:
+#        - addForeignKeyConstraint:
+#            baseTableName: query
+#            baseColumnNames: id
+#            referencedTableName: query_document
+#            referencedColumnNames: query_id
+#            constraintName: query_document_query_fk
+#            onUpdate: CASCADE

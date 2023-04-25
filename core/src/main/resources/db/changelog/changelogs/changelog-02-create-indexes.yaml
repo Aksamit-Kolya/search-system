@@ -1,0 +1,70 @@
+databaseChangeLog:
+#  - changeSet:
+#      id: 01-add-index-to-document-table
+#      author: ANiko
+#      changes:
+#        - addIndex:
+#            tableName: document
+#            columns: publish_date
+#            indexName: idx_document_publish_date
+#
+#        - addIndex:
+#            tableName: document
+#            columns: name
+#            indexName: idx_document_name
+#
+#        - addIndex:
+#            tableName: document
+#            columns: url
+#            indexName: idx_document_url
+
+  - changeSet:
+      id: add-index-to-keyword-word
+      author: ANiko
+      changes:
+        - createIndex:
+            indexName: idx_keyword_word
+            tableName: keyword
+            columns:
+              - column:
+                  name: word
+#  - changeSet:
+#      id: 03-add-indexes-to-join-tables
+#      author: ANiko
+#      changes:
+#        - addIndex:
+#            tableName: idx_document_document
+#            columns:
+#              - document_id
+#              - related_document_id
+#            indexName: idx_document_document
+#
+#        - addIndex:
+#            tableName: document_keyword
+#            columns:
+#              - document_id
+#              - keyword_id
+#            indexName: idx_document_keyword
+#
+#        - addIndex:
+#            tableName: query_document
+#            columns:
+#              - query_id
+#              - document_id
+#            indexName: idx_query_document
+#
+#        - addIndex:
+#            tableName: query_keyword
+#            columns:
+#              - query_id
+#              - keyword_id
+#            indexName: idx_query_keyword
+#
+#  - changeSet:
+#      id: 04-add-index-to-query-table
+#      author: ANiko
+#      changes:
+#        - addIndex:
+#            tableName: query
+#            columns: timestamp
+#            indexName: idx_query_timestamp

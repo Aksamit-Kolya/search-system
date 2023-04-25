@@ -26,16 +26,16 @@ public class CrawlerMessageConsumer {
 
     @RabbitHandler
     public void handleMessage(CrawlUrlTaskMessage message) {
-        this.singleUrlTaskProcessor.process(message);
+        System.out.println("###1"); this.singleUrlTaskProcessor.process(message);
     }
 
     @RabbitHandler
     public void handleMessage(CrawlUrlWithDepthTaskMessage message) {
-        this.baseUrlTaskProcessor.process(message);
+        System.out.println("###2"); this.baseUrlTaskProcessor.process(message);
     }
 
     @RabbitHandler
     public void handleMessage(CrawlHostTaskMessage message) {
-        this.hostNameTaskProcessor.process(message);
+        System.out.println("###3"); this.hostNameTaskProcessor.process(message);
     }
 }

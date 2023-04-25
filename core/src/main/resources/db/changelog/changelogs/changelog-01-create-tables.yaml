@@ -1,0 +1,211 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-document-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: document
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: url
+                  type: varchar(500)
+              - column:
+                  name: content
+                  type: text
+              - column:
+                  name: word_count
+                  type: integer
+                  defaultValue: '0'
+              - column:
+                  name: publish_date
+                  type: date
+
+  - changeSet:
+      id: 02-create-keyword-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: keyword
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: word
+                  type: varchar(255)
+              - column:
+                  name: frequency
+                  type: bigint
+              - column:
+                  name: inverse_frequency
+                  type: float
+
+  - changeSet:
+      id: 03-create-user-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+
+  - changeSet:
+      id: 04-create-query-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: query
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: text
+                  type: varchar(500)
+              - column:
+                  name: timestamp
+                  type: timestamp
+                  defaultValueComputed: "now()"
+
+  - changeSet:
+      id: 05-create-document-document-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: document_document
+            columns:
+              - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+              - column:
+                  name: document_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: document_document_fk
+                    references: document(id)
+              - column:
+                  name: related_document_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: document_document_related_fk
+                    references: document(id)
+
+  - changeSet:
+      id: 06-create-document-keyword-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: document_keyword
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: document_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: document_keyword_document_fk
+                    references: document(id)
+              - column:
+                  name: keyword_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: document_keyword_keyword_fk
+                    references: keyword(id)
+              - column:
+                  name: frequency
+                  type: integer
+              - column:
+                  name: tf_idf_rank
+                  type: float
+                  defaultValue: '0'
+
+
+  - changeSet:
+      id: 07-create-user-query-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: user_query
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: user_query_user_fk
+                    references: user(id)
+              - column:
+                  name: query_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: user_query_query_fk
+                    references: query(id)
+
+  - changeSet:
+      id: 08-create-query-document-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: query_document
+            columns:
+              - column:
+                  name: query_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: query_document_query_fk
+                    references: query(id)
+              - column:
+                  name: document_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: query_document_document_fk
+                    references: document(id)
+
+  - changeSet:
+      id: 09-create-query-keyword-table
+      author: ANiko
+      changes:
+        - createTable:
+            tableName: query_keyword
+            columns:
+              - column:
+                  name: query_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: query_keyword_query_fk
+                    references: query(id)
+              - column:
+                  name: keyword_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: query_keyword_keyword_fk
+                    references: keyword(id)
