@@ -32,9 +32,9 @@ public class CrawlerController {
         return ResponseEntity.ok("URL and depth sent to the crawler successfully");
     }
 
-    @PostMapping("/crawl/host")
-    public ResponseEntity<String> sendHostNameToCrawler(@RequestParam(value = "host", required = true) String host) {
-        crawlerService.sendHostNameToCrawler(host);
+    @PostMapping("/crawl/domain")
+    public ResponseEntity<String> sendDomainToCrawler(@RequestParam(value = "domain", required = true) String domain) {
+        crawlerService.sendDomainToCrawler(domain);
         return ResponseEntity.ok("Host Name sent to the crawler successfully");
     }
 }

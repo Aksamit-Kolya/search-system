@@ -19,7 +19,10 @@ databaseChangeLog:
                   name: url
                   type: varchar(500)
               - column:
-                  name: content
+                  name: title
+                  type: text
+              - column:
+                  name: description
                   type: text
               - column:
                   name: word_count

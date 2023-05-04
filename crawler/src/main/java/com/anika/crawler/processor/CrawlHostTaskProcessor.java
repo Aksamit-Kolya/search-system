@@ -1,13 +1,13 @@
 package com.anika.crawler.processor;
 
 import com.anika.message.broker.consumer.processor.CrawlerTaskProcessor;
-import com.anika.message.broker.message.CrawlHostTaskMessage;
+import com.anika.message.broker.message.CrawlDomainTaskMessage;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CrawlHostTaskProcessor implements CrawlerTaskProcessor<CrawlHostTaskMessage> {
+public class CrawlHostTaskProcessor implements CrawlerTaskProcessor<CrawlDomainTaskMessage> {
 
     @Override
-    public void process(CrawlHostTaskMessage message) {
+    public void process(CrawlDomainTaskMessage message) {
     }
 }

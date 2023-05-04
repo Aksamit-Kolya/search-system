@@ -2,7 +2,7 @@ package com.anika.message.broker.consumer;
 
 import com.anika.message.broker.consumer.processor.CrawlerTaskProcessor;
 import com.anika.message.broker.message.CrawlUrlWithDepthTaskMessage;
-import com.anika.message.broker.message.CrawlHostTaskMessage;
+import com.anika.message.broker.message.CrawlDomainTaskMessage;
 import com.anika.message.broker.message.CrawlUrlTaskMessage;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -22,20 +22,20 @@ public class CrawlerMessageConsumer {
     @Autowired(required = false)
     private CrawlerTaskProcessor<CrawlUrlWithDepthTaskMessage> baseUrlTaskProcessor;
     @Autowired(required = false)
-    private CrawlerTaskProcessor<CrawlHostTaskMessage> hostNameTaskProcessor;
+    private CrawlerTaskProcessor<CrawlDomainTaskMessage> domainTaskProcessor;
 
     @RabbitHandler
     public void handleMessage(CrawlUrlTaskMessage message) {
-        System.out.println("###1"); this.singleUrlTaskProcessor.process(message);
+        this.singleUrlTaskProcessor.process(message);
     }
 
     @RabbitHandler
     public void handleMessage(CrawlUrlWithDepthTaskMessage message) {
-        System.out.println("###2"); this.baseUrlTaskProcessor.process(message);
+        this.baseUrlTaskProcessor.process(message);
     }
 
     @RabbitHandler
-    public void handleMessage(CrawlHostTaskMessage message) {
-        System.out.println("###3"); this.hostNameTaskProcessor.process(message);
+    public void handleMessage(CrawlDomainTaskMessage message) {
+        this.domainTaskProcessor.process(message);
     }
 }

@@ -25,7 +25,7 @@ public class CrawlerServiceImpl implements CrawlerService{
     }
 
     @Override
-    public void sendHostNameToCrawler(String hostName) {
-        crawlerMessageProducer.sendHostNameToCrawler(hostName);
+    public void sendDomainToCrawler(String domain) {
+        crawlerMessageProducer.sendDomainToCrawler(domain);
     }
 }

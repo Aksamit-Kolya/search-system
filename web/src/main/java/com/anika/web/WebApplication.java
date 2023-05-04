@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"com.anika.core.entity"})
 @ComponentScan(basePackages = {"com.anika.core", "com.anika.web", "com.anika.message.broker"})
 public class WebApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(WebApplication.class, args);
     }
