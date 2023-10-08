@@ -32,7 +32,7 @@ public class JsoupWebScraper implements WebScraper{
         String pageDescription = document.select("meta[name=description]").attr("content");
         String pageKeywords = document.select("meta[name=keywords]").attr("content");
         String pageContent = document.body().text();
-        Elements links = document.select("a[href^=http], a[href^=https]");
+        Elements links = document.select("a[href^=http], a[href^=https], a[href^=\"/\"]");
         String pageLanguage = getPageLanguage(document);
 
         return WebPageInfo.builder()
@@ -52,7 +52,7 @@ public class JsoupWebScraper implements WebScraper{
     }
 
     private List<String> getLinkUrls(Elements links) {
-        return links.eachAttr("href").stream()
+        return links.stream().map(link -> link.absUrl("href"))
                 .filter(StringUtils::isNotBlank)
                 .collect(Collectors.toList());
     }

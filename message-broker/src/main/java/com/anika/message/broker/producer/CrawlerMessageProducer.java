@@ -1,8 +1,9 @@
 package com.anika.message.broker.producer;
 
-import com.anika.message.broker.message.CrawlUrlWithDepthTaskMessage;
 import com.anika.message.broker.message.CrawlDomainTaskMessage;
+import com.anika.message.broker.message.CrawlDomainWithDepthTaskMessage;
 import com.anika.message.broker.message.CrawlUrlTaskMessage;
+import com.anika.message.broker.message.CrawlUrlWithDepthTaskMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,5 +35,9 @@ public class CrawlerMessageProducer {
 
     public void sendDomainToCrawler(String domain) {
         rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlDomainTaskMessage(domain));
+    }
+
+    public void sendDomainWithDepthToCrawler(String domain, Integer depth) {
+        rabbitTemplate.convertAndSend(exchange, routingKey, new CrawlDomainWithDepthTaskMessage(domain, depth));
     }
 }

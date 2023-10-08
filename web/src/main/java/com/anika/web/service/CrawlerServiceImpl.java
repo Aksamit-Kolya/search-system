@@ -28,4 +28,9 @@ public class CrawlerServiceImpl implements CrawlerService{
     public void sendDomainToCrawler(String domain) {
         crawlerMessageProducer.sendDomainToCrawler(domain);
     }
+
+    @Override
+    public void sendDomainWithDepthToCrawler(String domain, Integer depth) {
+        crawlerMessageProducer.sendDomainWithDepthToCrawler(domain, depth);
+    }
 }

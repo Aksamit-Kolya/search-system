@@ -58,9 +58,10 @@ public class WebCrawlerServiceImpl implements WebCrawlerService {
         Queue<String> urlsToVisit = new LinkedList<>();
         urlsToVisit.offer(startUrl);
 
-        for (int depth = 0; depth <= maxDepth && !urlsToVisit.isEmpty(); depth++) {
+        for (int depth = 0; depth <= maxDepth && !urlsToVisit.isEmpty(); ++depth) {
             int currentLevelSize = urlsToVisit.size();
-            for (int i = 0; i < currentLevelSize; i++) {
+            System.out.println("depth: " + depth + "\ncurrentLevelSize: " + currentLevelSize);
+            for (int i = 0; i < currentLevelSize; ++i) {
                 String currentUrl = urlsToVisit.poll();
                 if (visitedUrls.contains(currentUrl)) {
                     continue;
@@ -69,7 +70,7 @@ public class WebCrawlerServiceImpl implements WebCrawlerService {
                 visitedUrls.add(currentUrl);
                 WebPageInfo pageInfo = webScraper.scrape(currentUrl)
                         .filter(page -> !page.getContent().isBlank())
-                        .filter(page -> page.getLanguage().toLowerCase().contains("en"))
+                        //.filter(page -> page.getLanguage().toLowerCase().contains("en"))
                         .orElse(null);
 
                 if (pageInfo != null) {

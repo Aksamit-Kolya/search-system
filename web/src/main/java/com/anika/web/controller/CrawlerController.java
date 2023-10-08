@@ -3,10 +3,7 @@ package com.anika.web.controller;
 import com.anika.web.service.CrawlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/crawler")
@@ -25,16 +22,26 @@ public class CrawlerController {
         return ResponseEntity.ok("URL sent to the crawler successfully");
     }
 
+    //@CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/crawl/url/depth")
-    public ResponseEntity<String> sendUrlToCrawlerWithDepth(@RequestParam(value = "url", required = true) String url,
+    public ResponseEntity<String> sendUrlWithDepthToCrawler(@RequestParam(value = "url", required = true) String url,
                                                             @RequestParam(value = "depth", required = true) Integer depth) {
         crawlerService.sendUrlToCrawler(url, depth);
         return ResponseEntity.ok("URL and depth sent to the crawler successfully");
     }
 
+    //@CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/crawl/domain")
     public ResponseEntity<String> sendDomainToCrawler(@RequestParam(value = "domain", required = true) String domain) {
         crawlerService.sendDomainToCrawler(domain);
+        return ResponseEntity.ok("Host Name sent to the crawler successfully");
+    }
+
+    //@CrossOrigin(origins = "http://localhost:8081")
+    @PostMapping("/crawl/domain/depth")
+    public ResponseEntity<String> sendDomainWithDepthToCrawler(@RequestParam(value = "domainRoot", required = true) String domain,
+                                                               @RequestParam(value = "depth", required = true) Integer depth) {
+        crawlerService.sendDomainWithDepthToCrawler(domain, depth);
         return ResponseEntity.ok("Host Name sent to the crawler successfully");
     }
 }

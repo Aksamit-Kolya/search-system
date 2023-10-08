@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_id_column_to_user_query
+      author: ANiko
+      changes:
+        - addColumn:
+            tableName: user_query
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true

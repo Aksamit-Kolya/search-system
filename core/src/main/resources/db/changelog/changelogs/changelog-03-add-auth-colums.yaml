@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_password_and_email_columns_to_user_table
+      author: your_name
+      changes:
+        - addColumn:
+            tableName: user
+            columns:
+              - column:
+                  name: password
+                  type: VARCHAR(128)
+              - column:
+                  name: email
+                  type: VARCHAR(255)

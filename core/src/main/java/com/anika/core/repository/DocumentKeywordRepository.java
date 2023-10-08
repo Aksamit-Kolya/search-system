@@ -17,4 +17,6 @@ public interface DocumentKeywordRepository  extends JpaRepository<DocumentKeywor
     Collection<DocumentKeyword> findByDocument(Document document);
 
     List<DocumentKeyword> findByKeyword(Keyword keyword);
+
+    List<DocumentKeyword> findAllByTfidfRankIsNull();
 }

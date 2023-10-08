@@ -6,9 +6,12 @@
     <modules>
         <module>core</module>
         <module>web</module>
+        <module>security</module>
         <module>crawler</module>
         <module>message-broker</module>
     </modules>
+    <dependencies>
+    </dependencies>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

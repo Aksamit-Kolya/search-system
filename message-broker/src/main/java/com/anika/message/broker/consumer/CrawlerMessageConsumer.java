@@ -1,8 +1,9 @@
 package com.anika.message.broker.consumer;
 
-import com.anika.message.broker.consumer.processor.CrawlerTaskProcessor;
-import com.anika.message.broker.message.CrawlUrlWithDepthTaskMessage;
 import com.anika.message.broker.message.CrawlDomainTaskMessage;
+import com.anika.message.broker.message.CrawlUrlWithDepthTaskMessage;
+import com.anika.message.broker.consumer.processor.CrawlerTaskProcessor;
+import com.anika.message.broker.message.CrawlDomainWithDepthTaskMessage;
 import com.anika.message.broker.message.CrawlUrlTaskMessage;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -23,6 +24,8 @@ public class CrawlerMessageConsumer {
     private CrawlerTaskProcessor<CrawlUrlWithDepthTaskMessage> baseUrlTaskProcessor;
     @Autowired(required = false)
     private CrawlerTaskProcessor<CrawlDomainTaskMessage> domainTaskProcessor;
+    @Autowired(required = false)
+    private CrawlerTaskProcessor<CrawlDomainWithDepthTaskMessage> domainWithDepthTaskProcessor;
 
     @RabbitHandler
     public void handleMessage(CrawlUrlTaskMessage message) {
@@ -37,5 +40,10 @@ public class CrawlerMessageConsumer {
     @RabbitHandler
     public void handleMessage(CrawlDomainTaskMessage message) {
         this.domainTaskProcessor.process(message);
+    }
+
+    @RabbitHandler
+    public void handleMessage(CrawlDomainWithDepthTaskMessage message) {
+        this.domainWithDepthTaskProcessor.process(message);
     }
 }

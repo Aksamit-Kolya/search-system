@@ -5,4 +5,4 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public record CrawlDomainTaskMessage(@JsonProperty("domain") String domain) implements Serializable {}
+public record CrawlDomainTaskMessage(@JsonProperty("domainRoot") String domain) implements Serializable {}

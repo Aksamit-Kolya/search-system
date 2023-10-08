@@ -6,4 +6,6 @@ public interface CrawlerService {
     void sendUrlToCrawler(String url, Integer depth);
 
     void sendDomainToCrawler(String domain);
+
+    void sendDomainWithDepthToCrawler(String domain, Integer depth);
 }

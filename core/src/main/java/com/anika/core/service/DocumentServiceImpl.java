@@ -44,14 +44,17 @@ public class DocumentServiceImpl implements DocumentService {
         calculateWordOccurrencesAndMultiply(webPageInfo.getKeywrods(), 100).forEach((key, value) -> wordOccurrences.merge(key, value, Integer::sum));
         calculateWordOccurrencesAndMultiply(webPageInfo.getContent(), 100).forEach((key, value) -> wordOccurrences.merge(key, value, Integer::sum));
 
-        Document document = upsertDocument(webPageInfo.getUrl(), webPageInfo.getTitle(), webPageInfo.getDescription());
+        // Calculate the number of words in the document
+        Integer tokensNumber = Math.toIntExact(wordOccurrences.values().stream().mapToLong(Integer::intValue).sum());
+
+        Document document = upsertDocument(webPageInfo.getUrl(), webPageInfo.getTitle(), webPageInfo.getDescription(), tokensNumber);
         insertKeywordsForDocument(document, wordOccurrences);
 
         return document;
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public void recalculateTfItfRankForAllDocumentKeywords() {
         // Get all keywords
         List<Keyword> keywords = keywordRepository.findAll();
@@ -62,6 +65,7 @@ public class DocumentServiceImpl implements DocumentService {
 
             // Calculate the inverse document frequency for the current keyword
             double idf = Math.log((double) keywords.size() / (double) keyword.getFrequency());
+            keyword.setInverseFrequency((float) idf);
 
             // Recalculate tf_itf_rank for each document keyword
             for (DocumentKeyword documentKeyword : documentKeywords) {
@@ -72,24 +76,50 @@ public class DocumentServiceImpl implements DocumentService {
 
             // Save the updated document keywords
             documentKeywordRepository.saveAll(documentKeywords);
+            keywordRepository.save(keyword);
         }
     }
 
-    private Document upsertDocument(String url, String title, String description) {
+    //@Override
+    //@Transactional
+    public void recalculateTfItfRankForNewDocumentKeywords() {
+        // Get all keywords
+        Long keywordsCount = keywordRepository.count();
+        List<DocumentKeyword> newDocumentKeywords = documentKeywordRepository.findAllByTfidfRankIsNull();
+        List<Keyword> keywordsToRecalculate = newDocumentKeywords.stream().map(DocumentKeyword::getKeyword).toList();
+
+        for (Keyword keyword : keywordsToRecalculate) {
+            // Get all document keywords for the current keyword
+            List<DocumentKeyword> documentKeywords = documentKeywordRepository.findByKeyword(keyword);
+
+            // Calculate the inverse document frequency for the current keyword
+            double idf = Math.log((double) keywordsCount / (double) keyword.getFrequency());
+            keyword.setInverseFrequency((float) idf);
+
+            // Recalculate tf_itf_rank for each document keyword
+            for (DocumentKeyword documentKeyword : documentKeywords) {
+                double tf = (double) documentKeyword.getFrequency() / (double) documentKeyword.getDocument().getWordCount();
+                double tf_idf = tf * idf;
+                documentKeyword.setTfidfRank(tf_idf);
+            }
+
+            // Save the updated document keywords
+            documentKeywordRepository.saveAll(documentKeywords);
+            keywordRepository.save(keyword);
+        }
+    }
+
+    private Document upsertDocument(String url, String title, String description, Integer tokensNumber) {
         Document document = documentRepository.findByUrl(url).orElseGet(Document::new);
 
         document.setUrl(url);
         document.setTitle(title);
         document.setDescription(description);
+        document.setWordCount(tokensNumber);
 
         return documentRepository.save(document);
     }
     private void insertKeywordsForDocument(Document document, Map<String, Integer> keywordMap) {
-        // Calculate the number of words in the document
-        Integer tokensNumber = Math.toIntExact(keywordMap.values().stream().mapToLong(Integer::intValue).sum());
-
-        // Set the tokensNumber field in the Document entity
-        document.setWordCount(tokensNumber);
 
         Map<String, Keyword> existingKeywords = keywordRepository.findByWordIn(keywordMap.keySet())
                 .stream()
