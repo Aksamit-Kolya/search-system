@@ -101,23 +101,19 @@ databaseChangeLog:
             tableName: document_document
             columns:
               - column:
-                    name: id
-                    type: bigint
-                    autoIncrement: true
-                    constraints:
-                      primaryKey: true
-              - column:
                   name: document_id
                   type: bigint
                   constraints:
                     foreignKeyName: document_document_fk
                     references: document(id)
+                    primaryKey: true
               - column:
                   name: related_document_id
                   type: bigint
                   constraints:
                     foreignKeyName: document_document_related_fk
                     references: document(id)
+                    primaryKey: true
 
   - changeSet:
       id: 06-create-document-keyword-table
@@ -127,23 +123,19 @@ databaseChangeLog:
             tableName: document_keyword
             columns:
               - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-              - column:
                   name: document_id
                   type: bigint
                   constraints:
                     foreignKeyName: document_keyword_document_fk
                     references: document(id)
+                    primaryKey: true
               - column:
                   name: keyword_id
                   type: bigint
                   constraints:
                     foreignKeyName: document_keyword_keyword_fk
                     references: keyword(id)
+                    primaryKey: true
               - column:
                   name: frequency
                   type: integer

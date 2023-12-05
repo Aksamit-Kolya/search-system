@@ -1,29 +1,28 @@
 package com.anika.core.entity;
 
-import com.anika.core.repository.DocumentKeywordRepository;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.anika.core.key.DocumentKeywordKey;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "document_keyword")
 public class DocumentKeyword {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private DocumentKeywordKey id;
 
-    @ManyToOne
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @MapsId("document_id")
     private Document document;
 
-    @ManyToOne
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @MapsId("keyword_id")
     private Keyword keyword;
 
     private Integer frequency;
@@ -34,9 +33,16 @@ public class DocumentKeyword {
     public DocumentKeyword(Document document, Keyword keyword, Integer frequency) {
         this.document = document;
         this.keyword = keyword;
+//        if(keyword.getId() == null) {
+//            System.out.println("Keyword id is null");
+//        }
+        this.id = new DocumentKeywordKey(document.getId(), keyword.getId());
         this.frequency = frequency;
     }
-
-    public DocumentKeyword() {
+    @PrePersist
+    public void setId() {
+        if(this.id.getKeywordId() == null) {
+            this.id.setKeywordId(this.keyword.getId());
+        }
     }
 }

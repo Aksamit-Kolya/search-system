@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -14,6 +15,6 @@ public class WebPageInfo {
     private String description;
     private String keywrods;
     private String content;
-    private List<String> links;
+    private Set<String> links;
     private String language;
 }

@@ -15,9 +15,11 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
+.mvn
 *.iws
 *.iml
 *.ipr
+
 
 ### NetBeans ###
 /nbproject/private/
@@ -34,3 +36,6 @@ build/
 
 ### Docker ###
 *pgdata
+
+### I don't know ###
+.DS*

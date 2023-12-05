@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ public class Document {
 //            inverseJoinColumns = @JoinColumn(name = "related_document_id"))
 //    private Set<Document> relatedDocuments = new HashSet<>();
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "document")
     private Set<DocumentKeyword> documentKeywords = new HashSet<>();
 

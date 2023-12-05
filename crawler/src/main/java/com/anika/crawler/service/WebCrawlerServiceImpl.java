@@ -1,9 +1,10 @@
 package com.anika.crawler.service;
 
 import com.anika.core.dto.WebPageInfo;
+import com.anika.core.entity.Document;
+import com.anika.core.repository.DocumentDocumentRepository;
 import com.anika.core.service.DocumentService;
 import com.anika.core.service.WebScraper;
-import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
 
@@ -53,19 +54,21 @@ public class WebCrawlerServiceImpl implements WebCrawlerService {
         crawl(root, maxDepth, url -> getDomainName(url).equals(domainName));
     }
 
+    record PageToVisit(String url, Document parent) {
+    }
+
     private void crawl(String startUrl, int maxDepth, Predicate<String> filter) {
         Set<String> visitedUrls = new HashSet<>();
-        Queue<String> urlsToVisit = new LinkedList<>();
-        urlsToVisit.offer(startUrl);
+        Queue<PageToVisit> pagesToVisit = new LinkedList<>();
+        pagesToVisit.offer(new PageToVisit(startUrl, null));
 
-        for (int depth = 0; depth <= maxDepth && !urlsToVisit.isEmpty(); ++depth) {
-            int currentLevelSize = urlsToVisit.size();
+        for (int depth = 0; depth <= maxDepth && !pagesToVisit.isEmpty(); ++depth) {
+            int currentLevelSize = pagesToVisit.size();
             System.out.println("depth: " + depth + "\ncurrentLevelSize: " + currentLevelSize);
             for (int i = 0; i < currentLevelSize; ++i) {
-                String currentUrl = urlsToVisit.poll();
-                if (visitedUrls.contains(currentUrl)) {
-                    continue;
-                }
+                PageToVisit currentPageToVisit = pagesToVisit.poll();
+                Document currentParent = currentPageToVisit.parent;
+                String currentUrl = currentPageToVisit.url;
 
                 visitedUrls.add(currentUrl);
                 WebPageInfo pageInfo = webScraper.scrape(currentUrl)
@@ -73,11 +76,16 @@ public class WebCrawlerServiceImpl implements WebCrawlerService {
                         //.filter(page -> page.getLanguage().toLowerCase().contains("en"))
                         .orElse(null);
 
+                System.out.println("currentUrl: " + currentUrl + "\nlinksNumber: " + pageInfo.getLinks().size());
+
                 if (pageInfo != null) {
-                    documentService.saveDocument(pageInfo);
+                    Document newDocument = documentService.saveDocument(pageInfo);
+                    if(currentParent != null) documentService.createDocumentLink(currentParent, newDocument);
+                    documentService.createDocumentLinks(newDocument, pageInfo.getLinks());
                     pageInfo.getLinks().stream()
                             .filter(filter.and(url -> !visitedUrls.contains(url)))
-                            .forEach(urlsToVisit::offer);
+                            .map(url -> new PageToVisit(url, newDocument))
+                            .forEach(pagesToVisit::offer);
                 }
             }
         }

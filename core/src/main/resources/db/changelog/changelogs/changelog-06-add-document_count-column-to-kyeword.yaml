@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_document_count_to_keyword
+      author: ANiko
+      changes:
+        - addColumn:
+            tableName: keyword
+            columns:
+              - column:
+                  name: document_count
+                  type: integer
+                  defaultValue: 0

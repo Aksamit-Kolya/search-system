@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class JsoupWebScraper implements WebScraper{
                 .description(pageDescription)
                 .content(pageContent)
                 .keywrods(pageKeywords)
-                .links(getLinkUrls(links))
+                .links(new HashSet<>(getLinkUrls(links)))
                 .language(pageLanguage)
                 .build();
     }

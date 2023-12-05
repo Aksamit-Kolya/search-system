@@ -2,33 +2,37 @@ package com.anika.core.service;
 
 import com.anika.core.dto.WebPageInfo;
 import com.anika.core.entity.Document;
+import com.anika.core.entity.DocumentDocument;
 import com.anika.core.entity.DocumentKeyword;
 import com.anika.core.entity.Keyword;
+import com.anika.core.repository.DocumentDocumentRepository;
 import com.anika.core.repository.DocumentKeywordRepository;
 import com.anika.core.repository.DocumentRepository;
 import com.anika.core.repository.KeywordRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
     private final DocumentRepository documentRepository;
+    private final DocumentDocumentRepository documentDocumentRepository;
+
     private final KeywordRepository keywordRepository;
     private final DocumentKeywordRepository documentKeywordRepository;
     private final TextProcessingService textProcessingService;
 
+
     public DocumentServiceImpl(DocumentRepository documentRepository,
+                               DocumentDocumentRepository documentDocumentRepository,
                                KeywordRepository keywordRepository,
                                DocumentKeywordRepository documentKeywordRepository,
                                TextProcessingService textProcessingService) {
         this.documentRepository = documentRepository;
+        this.documentDocumentRepository = documentDocumentRepository;
         this.keywordRepository = keywordRepository;
         this.documentKeywordRepository = documentKeywordRepository;
         this.textProcessingService = textProcessingService;
@@ -78,6 +82,24 @@ public class DocumentServiceImpl implements DocumentService {
             documentKeywordRepository.saveAll(documentKeywords);
             keywordRepository.save(keyword);
         }
+    }
+
+    @Override
+    public DocumentDocument createDocumentLink(Document sourceDocument, Document targetDocument) {
+        DocumentDocument dd = new DocumentDocument(sourceDocument, targetDocument);
+        documentDocumentRepository.save(dd);
+        return new DocumentDocument(sourceDocument, targetDocument);
+    }
+
+    @Override
+    public List<DocumentDocument> createDocumentLinks(Document sourceDocument, Collection<String> urls) {
+        List<DocumentDocument> documentLinks = new ArrayList<>();
+        List<Document> targetDocuments = documentRepository.findAllByUrlIn(urls);
+        for(Document targetDocument : targetDocuments) {
+            documentLinks.add(new DocumentDocument(sourceDocument, targetDocument));
+        }
+        documentDocumentRepository.saveAll(documentLinks);
+        return documentLinks;
     }
 
     //@Override
